@@ -46,9 +46,6 @@ let timerID = 0;
 ====================================================================================*/
 window.onload = function () {
     game_button.addEventListener('click', buttonClickHandler);
-    play_fields.forEach(cell => {
-        cell.addEventListener('click', cellClickHandler);
-    } )
 };
 
 
@@ -89,20 +86,26 @@ function buttonClickHandler(event)
 
     
         // 5. Alle cellen klikbaar maken
-    
+        play_fields.forEach(cell => {
+            cell.addEventListener('click', cellClickHandler);
+            cell.src = 'img/empty.jpg';
+        });
         // 6. Speelveld leegmaken
 
     } else {
         // Onderstaande alleen uitvoeren wanneer de tekst 'Stop ronde' op de knop staat
         // 1. Speelveld leegmaken
-    
+        play_fields.forEach(cell => {
+            cell.src = 'img/empty.jpg';
+            cell.removeEventListener('click', cellClickHandler);
+        });
         // 2. Timer stoppen
         clearInterval(timerID);
 
         // 3. Cellen onklikbaar maken
-    
-        // 4. Knoptekst veranderen in 'Start ronde'
 
+        // 4. Knoptekst veranderen in 'Start ronde'
+        event.target.innerHTML = 'Start ronde';
     }
 
 }
