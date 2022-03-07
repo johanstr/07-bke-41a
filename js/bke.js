@@ -125,7 +125,37 @@ function buttonClickHandler(event)
  */
 function cellClickHandler(event)
 {
-    console.log('Cell clicked');
+    // 1. Symbool van speler in de cel tonen
+    if (current_player === 1)
+        event.target.src = 'img/circle.png';
+    else
+        event.target.src = 'img/cross.png';
+    
+    // 2. De betreffende cel onklikbaar maken
+    event.target.removeEventListener('click', cellClickHandler);
+
+    // 3. Beurt wisselen
+    current_player = current_player === 1 ? 2 : 1;
+
+    // 4. Tonen wie nu aan de beurt is
+    element_turn_playernumber.innerHTML = current_player;
+    if(current_player === 1)
+        element_turn_image.src = 'img/circle.png';
+    else
+        element_turn_image.src = 'img/cross.png';
+
+    // 5a. Controleren op een win situatie
+    if ((play_fields[0].src.includes('circle.png')
+        && play_fields[1].src.includes('circle.png')
+        && play_fields[2].src.includes('circle.png'))
+        ||
+        (play_fields[3].src.includes('circle.png')
+        && play_fields[4].src.includes('circle.png')
+        && play_fields[5].src.includes('circle.png'))
+        )
+        console.log('Speler 1 gewonnen op rij 1');
+
+    // 5b. Controleren of er een gelijk spel is
 }
 
 
