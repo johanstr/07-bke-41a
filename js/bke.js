@@ -13,7 +13,9 @@
     veranderen. Constanten gebruiken we ook om met duidelijke variabele namen onze code
     meer leesbaar te houden.
 =====================================================================================*/
-
+const _PLAYER1_IMAGE = 'img/circle.png';
+const _PLAYER2_IMAGE = 'img/cross.png';
+const _EMPTY_IMAGE = 'img/empty.jpg';
 
 
 /*=====================================================================================
@@ -35,6 +37,8 @@ let round = 0;                              // Hulpvariabele
 let current_player = 0;                     // Spelernummer die aan de beurt is
 let round_time_in_seconds = 0;
 let timerID = 0;
+let score_player1 = 0;
+let score_player2 = 0;
 
 
 /*====================================================================================
@@ -84,22 +88,22 @@ function buttonClickHandler(event)
         current_player = Math.floor((Math.random() * 2) + 1);
         element_turn_playernumber.innerHTML = current_player;
         if(current_player === 1)
-            element_turn_image.src = 'img/circle.png';
+            element_turn_image.src = _PLAYER1_IMAGE;
         else
-            element_turn_image.src = 'img/cross.png';
+            element_turn_image.src = _PLAYER2_IMAGE;
 
         timerID = setInterval(gameTimer, 1000);
 
         play_fields.forEach(cell => {
             cell.addEventListener('click', cellClickHandler);
-            cell.src = 'img/empty.jpg';
+            cell.src = _EMPTY_IMAGE;
         });
 
     } else {
         // Onderstaande alleen uitvoeren wanneer de tekst 'Stop ronde' op de knop staat
         // 1. Speelveld leegmaken
         play_fields.forEach(cell => {
-            cell.src = 'img/empty.jpg';
+            cell.src = _EMPTY_IMAGE;
         });
 
         // 2. Timer stoppen
@@ -133,9 +137,9 @@ function cellClickHandler(event)
 {
     // 1. Symbool van de speler in de cel tonen
     if (current_player === 1)
-        event.target.src = 'img/circle.png';
+        event.target.src = _PLAYER1_IMAGE;
     else
-        event.target.src = 'img/cross.png';
+        event.target.src = _PLAYER2_IMAGE;
     
     // 2. De cel onklikbaar maken
     event.target.removeEventListener('click', cellClickHandler);
@@ -152,33 +156,50 @@ function cellClickHandler(event)
     // 4. Beurt tonen
     element_turn_playernumber.innerHTML = current_player;
     if(current_player === 1)
-        element_turn_image.src = 'img/circle.png';
+        element_turn_image.src = _PLAYER1_IMAGE;
     else
-        element_turn_image.src = 'img/cross.png';
+        element_turn_image.src = _PLAYER2_IMAGE;
 
     // 5a. Controleren of een speler gewonnen heeft
     // console.log(event.target.src.includes('circle.png'));
-    if ( checkIfPlayerWon('circle.png') ) {
-            console.log('Speler 1 heeft gewonnen');
-            // 1. Score toekennen aan speler 1
-            // 2. Score tonen
-            // 3. Dialoogvenster tonen met de winnaar
-            // 4. Ronde stoppen
-    } else if ( checkIfPlayerWon('cross.png') ) {
-        console.log('Speler 2 heeft gewonnen');
-        // 1. Score toekennen aan speler 2
+    if ( checkIfPlayerWon(_PLAYER1_IMAGE) ) {
+        
+        // 1. Score toekennen aan speler 1
+        score_player1 += 2;
+        // score_player1 = score_player1 + 2;
+
         // 2. Score tonen
+        element_score_player1.innerHTML = score_player1;
+
         // 3. Dialoogvenster tonen met de winnaar
         // 4. Ronde stoppen
-    } else if(checkForDraw()) {
-            console.log('Gelijk spel');
-            // 1. Score aan beide spelers toekennen
-            // 2. Score tonen
-            // 3. Dialoogvenster tonen m.b.t. gelijkspel
-            // 4. Ronde stoppen
-    }
+        game_button.click();
 
-    // 5b. Daarna controleren of er een gelijk spel is
+    } else if ( checkIfPlayerWon(_PLAYER2_IMAGE) ) {
+        // 1. Score toekennen aan speler 2
+        score_player2 += 2;
+
+        // 2. Score tonen
+        element_score_player2.innerHTML = score_player2;
+
+        // 3. Dialoogvenster tonen met de winnaar
+        // 4. Ronde stoppen
+        game_button.click();
+        
+    } else if(checkForDraw()) {
+        // 5b. Daarna controleren of er een gelijk spel is
+        // 1. Score aan beide spelers toekennen
+        score_player1 += 1;
+        score_player2 += 1;
+
+        // 2. Score tonen
+        element_score_player1.innerHTML = score_player1;
+        element_score_player2.innerHTML = score_player2;
+
+        // 3. Dialoogvenster tonen m.b.t. gelijkspel
+        // 4. Ronde stoppen
+        game_button.click();
+    }
 }
 
 
@@ -242,13 +263,13 @@ function checkIfPlayerWon(image)
 
 function checkForDraw()
 {
-    return (!play_fields[0].src.includes('empty.jpg') &&          // Controle op gelijk spel
-        !play_fields[1].src.includes('empty.jpg') && 
-        !play_fields[2].src.includes('empty.jpg') &&
-        !play_fields[3].src.includes('empty.jpg') && 
-        !play_fields[4].src.includes('empty.jpg') &&
-        !play_fields[5].src.includes('empty.jpg') && 
-        !play_fields[6].src.includes('empty.jpg') &&
-        !play_fields[7].src.includes('empty.jpg') && 
-        !play_fields[8].src.includes('empty.jpg'));
+    return (!play_fields[0].src.includes(_EMPTY_IMAGE) &&          // Controle op gelijk spel
+        !play_fields[1].src.includes(_EMPTY_IMAGE) && 
+        !play_fields[2].src.includes(_EMPTY_IMAGE) &&
+        !play_fields[3].src.includes(_EMPTY_IMAGE) && 
+        !play_fields[4].src.includes(_EMPTY_IMAGE) &&
+        !play_fields[5].src.includes(_EMPTY_IMAGE) && 
+        !play_fields[6].src.includes(_EMPTY_IMAGE) &&
+        !play_fields[7].src.includes(_EMPTY_IMAGE) && 
+        !play_fields[8].src.includes(_EMPTY_IMAGE));
 }
